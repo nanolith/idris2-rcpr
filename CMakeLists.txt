@@ -56,5 +56,5 @@ set_source_files_properties(
 
 ADD_CUSTOM_TARGET(
     test
-    COMMAND testrcpr
-    DEPENDS testrcpr)
+    COMMAND testidris2rcpr
+    DEPENDS testidris2rcpr)
