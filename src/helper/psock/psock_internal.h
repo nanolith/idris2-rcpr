@@ -12,6 +12,7 @@
 #include <rcpr/allocator.h>
 #include <rcpr/psock.h>
 #include <rcpr/resource/protected.h>
+#include <rcprhelper/psock.h>
 
 /* C++ compatibility. */
 # ifdef   __cplusplus
@@ -23,14 +24,14 @@ struct RCPR_SYM(psock_handle)
     RCPR_SYM(resource) hdr;
     bool owns_allocator;
     RCPR_SYM(allocator)* alloc;
-    RCPR_SYM(psock)* psock;
+    RCPR_SYM(psock)* sock;
     uint8_t buffer[4096];
     size_t size;
     status last_status;
 };
 
 /**
- * \brief Release a psock_handle resource.
+ * \brief Release a \ref psock_handle resource.
  *
  * \param r         The resource to release.
  *
