@@ -121,6 +121,24 @@ status RCPR_SYM(psock_br_handle_get_status)(RCPR_SYM(psock_br_handle)* handle);
 char* RCPR_SYM(psock_br_handle_read_line)(RCPR_SYM(psock_br_handle)* handle);
 
 /**
+ * \brief Return true if the given handle is not NULL.
+ *
+ * \param handle                The \ref psock_handle to check.
+ *
+ * \returns true if the handle is not NULL and false otherwise.
+ */
+bool RCPR_SYM(psock_handle_is_valid)(RCPR_SYM(psock_handle)* handle);
+
+/**
+ * \brief Return true if the given handle is not NULL.
+ *
+ * \param handle                The \ref psock_br_handle to check.
+ *
+ * \returns true if the handle is not NULL and false otherwise.
+ */
+bool RCPR_SYM(psock_br_handle_is_valid)(RCPR_SYM(psock_br_handle)* handle);
+
+/**
  * \brief Attempt to release a \ref psock_handle instance.
  *
  * \param handle                The \ref psock_handle instance to release.
