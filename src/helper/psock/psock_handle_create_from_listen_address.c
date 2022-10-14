@@ -75,6 +75,10 @@ RCPR_SYM(psock_handle)* RCPR_SYM(psock_handle_create_from_listen_address)(
         goto done;
     }
 
+    /* set the port. */
+    addr.sin_family = AF_INET;
+    addr.sin_port = htons(port);
+
     /* create a listening psock. */
     stat =
         psock_create_from_listen_address(
@@ -84,10 +88,6 @@ RCPR_SYM(psock_handle)* RCPR_SYM(psock_handle_create_from_listen_address)(
     {
         goto done;
     }
-
-    /* set the port. */
-    addr.sin_family = AF_INET;
-    addr.sin_port = htons(port);
 
     /* success. */
     stat = STATUS_SUCCESS;
