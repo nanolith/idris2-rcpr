@@ -25,8 +25,6 @@ struct RCPR_SYM(psock_handle)
     bool owns_allocator;
     RCPR_SYM(allocator)* alloc;
     RCPR_SYM(psock)* sock;
-    uint8_t buffer[4096];
-    size_t size;
     status last_status;
 };
 
