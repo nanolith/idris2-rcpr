@@ -12,9 +12,9 @@ rcprSym fn =
 public export
 librcpr : String -> String
 librcpr fn =
-    "C:" ++ (rcprSym fn) ++ ",librcpr-0.2.1"
+    "C:" ++ (rcprSym fn) ++ ",librcpr-0.2.1.so"
 
 public export
 librcprhelper : String -> String
 librcprhelper fn =
-    "C:" ++ (rcprSym fn) ++ ",librcprhelper"
+    "C:" ++ (rcprSym fn) ++ ",librcprhelper-0.2.1.so"
