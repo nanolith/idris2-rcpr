@@ -121,6 +121,20 @@ status RCPR_SYM(psock_br_handle_get_status)(RCPR_SYM(psock_br_handle)* handle);
 char* RCPR_SYM(psock_br_handle_read_line)(RCPR_SYM(psock_br_handle)* handle);
 
 /**
+ * \brief Write a string to the given buffered reader wrapper.
+ *
+ * \param handle                The \ref psock_br_handle instance to which this
+ *                              string is written.
+ * \param str                   The ASCII-Z terminated string to write.
+ *
+ * \returns a status code indicating success or failure.
+ *      - STATUS_SUCCESS on success.
+ *      - a non-zero error code on failure.
+ */
+status RCPR_SYM(psock_br_handle_write_string)(
+    RCPR_SYM(psock_br_handle)* handle, const char* str);
+
+/**
  * \brief Return true if the given handle is not NULL.
  *
  * \param handle                The \ref psock_handle to check.
