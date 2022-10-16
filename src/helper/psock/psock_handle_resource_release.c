@@ -36,6 +36,9 @@ status RCPR_SYM(psock_handle_resource_release)(RCPR_SYM(resource)* r)
     /* cache allocator. */
     allocator* alloc = handle->alloc;
 
+    /* cache allocator ownership. */
+    bool owns_allocator = handle->owns_allocator;
+
     /* release socket if set. */
     if (NULL != handle->sock)
     {
@@ -50,7 +53,7 @@ status RCPR_SYM(psock_handle_resource_release)(RCPR_SYM(resource)* r)
     reclaim_retval = allocator_reclaim(alloc, handle);
 
     /* if we own the allocator, release it. */
-    if (handle->owns_allocator)
+    if (owns_allocator)
     {
         allocator_release_retval =
             resource_release(allocator_resource_handle(alloc));
