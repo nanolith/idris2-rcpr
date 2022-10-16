@@ -121,7 +121,7 @@ status RCPR_SYM(psock_br_handle_get_status)(RCPR_SYM(psock_br_handle)* handle);
 char* RCPR_SYM(psock_br_handle_read_line)(RCPR_SYM(psock_br_handle)* handle);
 
 /**
- * \brief Write a string to the given buffered reader wrapper.
+ * \brief Write a string line to the given buffered reader wrapper.
  *
  * \param handle                The \ref psock_br_handle instance to which this
  *                              string is written.
@@ -131,7 +131,7 @@ char* RCPR_SYM(psock_br_handle_read_line)(RCPR_SYM(psock_br_handle)* handle);
  *      - STATUS_SUCCESS on success.
  *      - a non-zero error code on failure.
  */
-status RCPR_SYM(psock_br_handle_write_string)(
+status RCPR_SYM(psock_br_handle_write_string_line)(
     RCPR_SYM(psock_br_handle)* handle, const char* str);
 
 /**
