@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include <arpa/inet.h>
 #include <rcpr/allocator.h>
 #include <rcpr/psock.h>
 #include <rcpr/resource/protected.h>
@@ -26,6 +27,8 @@ struct RCPR_SYM(psock_handle)
     RCPR_SYM(allocator)* alloc;
     RCPR_SYM(psock)* sock;
     status last_status;
+    struct sockaddr_in addr;
+    socklen_t addrlen;
 };
 
 /**
