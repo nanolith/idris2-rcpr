@@ -31,6 +31,15 @@ struct RCPR_SYM(psock_handle)
     socklen_t addrlen;
 };
 
+struct RCPR_SYM(psock_br_handle)
+{
+    RCPR_SYM(resource) hdr;
+    bool owns_allocator;
+    RCPR_SYM(allocator)* alloc;
+    RCPR_SYM(psock_br)* br;
+    status last_status;
+};
+
 /**
  * \brief Release a \ref psock_handle resource.
  *
