@@ -5,9 +5,11 @@ import System.FFI
 
 %default total
 
+export
 PsockHandle : Type
 PsockHandle = Struct (rcprSym "psock_handle") [] 
 
+export
 PsockBufferedReaderHandle : Type
 PsockBufferedReaderHandle = Struct (rcprSym "psock_br_handle") [] 
 
@@ -110,6 +112,15 @@ readLine : HasIO io => PsockBufferedReaderHandle -> io (Either Int String)
 readLine handle =
     readLineHelper 100 handle ""
 
+%foreign (librcprhelper "psock_br_handle_write_string_line")
+prim__brWriteStringLine : PsockBufferedReaderHandle -> String -> PrimIO Int
+
+export
+brWriteStringLine : HasIO io => PsockBufferedReaderHandle -> String -> io ()
+brWriteStringLine handle str = do
+    status <- primIO $ prim__brWriteStringLine handle str
+    pure ()
+
 %foreign (librcprhelper "psock_handle_release")
 prim__PsockHandleRelease : PsockHandle -> PrimIO Int
 
@@ -125,3 +136,63 @@ psockBufferedReaderHandleRelease
     : HasIO io => PsockBufferedReaderHandle -> io Int
 psockBufferedReaderHandleRelease handle =
     primIO (prim__PsockBufferedReaderHandleRelease handle)
+
+export
+withPsockHandleFromListenAddress :
+    HasIO io => String -> Bits16 -> (PsockHandle -> io ()) -> io ()
+withPsockHandleFromListenAddress addr port fn = do
+    handle <- mkPsockHandleFromListenAddress addr port
+    valid <- isPsockHandleValid handle
+    if valid
+        then do
+            status <- psockHandleGetStatus handle
+            if status == 0
+                then do
+                    () <- fn handle
+                    stat <- psockHandleRelease handle
+                    pure ()
+                else pure ()
+        else pure ()
+
+export
+withAcceptedPsockHandle :
+    HasIO io => PsockHandle -> (PsockHandle -> io ()) -> io ()
+withAcceptedPsockHandle handle fn = do
+    h <- accept handle
+    valid <- isPsockHandleValid h
+    if valid
+        then do
+            status <- psockHandleGetStatus h
+            if status == 0
+                then do
+                    () <- fn h
+                    stat <- psockHandleRelease h
+                    pure ()
+                else pure ()
+        else pure ()
+
+export
+withBufferedReader :
+    HasIO io => PsockHandle -> (PsockBufferedReaderHandle -> io ()) -> io ()
+withBufferedReader handle fn = do
+    br <- mkPsockBufferedReaderHandle handle
+    valid <- isPsockBufferedReaderHandleValid br
+    if valid
+        then do
+            status <- psockBufferedReaderHandleGetStatus br
+            if status == 0
+                then do
+                    () <- fn br
+                    stat <- psockBufferedReaderHandleRelease br
+                    pure ()
+                else pure ()
+        else pure ()
+
+export
+withReadLine :
+    HasIO io => PsockBufferedReaderHandle -> (String -> io ()) -> io ()
+withReadLine handle fn = do
+    line <- readLine handle
+    case line of
+        Left _ => pure ()
+        Right str => fn str
