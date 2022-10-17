@@ -153,6 +153,16 @@ bool RCPR_SYM(psock_handle_is_valid)(RCPR_SYM(psock_handle)* handle);
 bool RCPR_SYM(psock_br_handle_is_valid)(RCPR_SYM(psock_br_handle)* handle);
 
 /**
+ * \brief Return true if the given status is a partial line read status.
+ *
+ * \param s                     The status to check.
+ *
+ * \returns true if the status is a partial line read status and false
+ * otherwise.
+ */
+bool RCPR_SYM(psock_br_status_is_partial_line_read)(status s);
+
+/**
  * \brief Attempt to release a \ref psock_handle instance.
  *
  * \param handle                The \ref psock_handle instance to release.
