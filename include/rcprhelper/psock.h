@@ -227,6 +227,22 @@ status RCPR_SYM(with_psock_handle_created_from_listen_address)(
  */
 RCPR_SYM(psock_handle)* RCPR_SYM(psock_handle_get)(void* opaque_handle);
 
+/**
+ * \brief Create a psock handle from an accepted socket,  use it to call the
+ * given callback, then release it.
+ *
+ * \param listen_handle         The handle of the listen socket.
+ * \param callback_fn           The callback function to call with the created
+ *                              handle on success.
+ *
+ * \returns a status code indicating success or failure.
+ *      - STATUS_SUCCESS on success.
+ *      - a non-zero error code on failure.
+ */
+status RCPR_SYM(with_accepted_psock_handle)(
+    RCPR_SYM(psock_handle)* listen_handle,
+    void (*callback_fn)(RCPR_SYM(psock_handle)*));
+
 /* C++ compatibility. */
 # ifdef   __cplusplus
 }
