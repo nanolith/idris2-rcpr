@@ -217,6 +217,16 @@ status RCPR_SYM(with_psock_handle_created_from_listen_address)(
     const char* listen_address, uint16_t port,
     void (*callback_fn)(RCPR_SYM(psock_handle)*));
 
+/**
+ * \brief Helper to cast an opaque \ref psock_handle instance to a
+ * \ref psock_handle instance.
+ *
+ * \param opaque_handle         A type erased handle to cast.
+ *
+ * \returns The non-opaque reference.
+ */
+RCPR_SYM(psock_handle)* RCPR_SYM(psock_handle_get)(void* opaque_handle);
+
 /* C++ compatibility. */
 # ifdef   __cplusplus
 }
