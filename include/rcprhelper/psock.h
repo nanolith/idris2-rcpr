@@ -228,7 +228,7 @@ status RCPR_SYM(with_psock_handle_created_from_listen_address)(
 RCPR_SYM(psock_handle)* RCPR_SYM(psock_handle_get)(void* opaque_handle);
 
 /**
- * \brief Create a psock handle from an accepted socket,  use it to call the
+ * \brief Create a psock handle from an accepted socket, use it to call the
  * given callback, then release it.
  *
  * \param listen_handle         The handle of the listen socket.
