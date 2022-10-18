@@ -228,6 +228,16 @@ status RCPR_SYM(with_psock_handle_created_from_listen_address)(
 RCPR_SYM(psock_handle)* RCPR_SYM(psock_handle_get)(void* opaque_handle);
 
 /**
+ * \brief Helper to cast an opaque \ref psock_br_handle instance to a
+ * \ref psock_br_handle instance.
+ *
+ * \param opaque_handle         A type erased handle to cast.
+ *
+ * \returns The non-opaque reference.
+ */
+RCPR_SYM(psock_br_handle)* RCPR_SYM(psock_br_handle_get)(void* opaque_handle);
+
+/**
  * \brief Create a psock handle from an accepted socket, use it to call the
  * given callback, then release it.
  *
