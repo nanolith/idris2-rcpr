@@ -243,6 +243,23 @@ status RCPR_SYM(with_accepted_psock_handle)(
     RCPR_SYM(psock_handle)* listen_handle,
     void (*callback_fn)(RCPR_SYM(psock_handle)*));
 
+/**
+ * \brief Create a buffered reader handle using the given psock handle, use it
+ * to call the given callback, then release it.
+ *
+ * \param handle                The \ref psock_handle to use to create this
+ *                              buffered reader handle.
+ * \param callback_fn           The callback function to call with the created
+ *                              handle on success.
+ *
+ * \returns a status code indicating success or failure.
+ *      - STATUS_SUCCESS on success.
+ *      - a non-zero error code on failure.
+ */
+status RCPR_SYM(with_buffered_reader)(
+    RCPR_SYM(psock_handle)* handle,
+    void (*callback_fn)(RCPR_SYM(psock_br_handle)*));
+
 /* C++ compatibility. */
 # ifdef   __cplusplus
 }
