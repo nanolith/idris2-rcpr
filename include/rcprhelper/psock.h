@@ -199,6 +199,24 @@ status RCPR_SYM(psock_br_handle_release)(RCPR_SYM(psock_br_handle)* handle);
  */
 char* RCPR_SYM(psock_get_string)(void* opaque_string);
 
+/**
+ * \brief Create a psock handle from a listen address, use it to call the given
+ * callback, then release it.
+ *
+ * \param listen_address        The listen address from which this handle is
+ *                              created.
+ * \param port                  The port from which this handle is created.
+ * \param callback_fn           The callback function to call with the created
+ *                              handle on success.
+ *
+ * \returns a status code indicating success or failure.
+ *      - STATUS_SUCCESS on success.
+ *      - a non-zero error code on failure.
+ */
+status RCPR_SYM(with_psock_handle_created_from_listen_address)(
+    const char* listen_address, uint16_t port,
+    void (*callback_fn)(RCPR_SYM(psock_handle)*));
+
 /* C++ compatibility. */
 # ifdef   __cplusplus
 }
