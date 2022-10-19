@@ -34,16 +34,13 @@ psockStatusIsPartialRead status =
 %foreign (librcprhelper "psock_get_string")
 getString : Ptr String -> String
 
-export
 %foreign (librcprhelper "psock_handle_get")
 getPsockHandle : Ptr PsockHandle -> PsockHandle
 
-export
 %foreign (librcprhelper "psock_br_handle_get")
 getPsockBuffedReaderHandle
     : Ptr PsockBufferedReaderHandle -> PsockBufferedReaderHandle
 
-export
 psockBufferedReaderHandleGetStatus
     : HasIO io => PsockBufferedReaderHandle -> io Int
 psockBufferedReaderHandleGetStatus handle =
@@ -66,7 +63,6 @@ readLineHelper (S x) handle line = do
             then readLineHelper x handle $ line ++ getString pstring
             else throwError status
 
-export
 readLine : PsockBufferedReaderHandle -> CIO String
 readLine handle =
     readLineHelper 100 handle ""
