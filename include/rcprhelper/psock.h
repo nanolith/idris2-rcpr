@@ -33,20 +33,6 @@ typedef struct RCPR_SYM(psock_handle) RCPR_SYM(psock_handle);
 typedef struct RCPR_SYM(psock_br_handle) RCPR_SYM(psock_br_handle);
 
 /**
- * \brief Accept a connection from the given listening \ref psock_handle
- * instance as a new \ref psock_handle instance.
- *
- * \note The returned \ref psock_handle should be checked for errors and NULL.
- *
- * \param accept_handle         The \ref psock_handle from which a connection is
- *                              accepted.
- *
- * \returns a \ref psock_handle or NULL.
- */
-RCPR_SYM(psock_handle)* RCPR_SYM(psock_handle_accept)(
-    RCPR_SYM(psock_handle)* accept_handle);
-
-/**
  * \brief Create a \ref psock_br_handle from a \ref psock_handle.
  *
  * \note The returned \ref psock_br_handle should be checked for errors and

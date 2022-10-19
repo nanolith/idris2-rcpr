@@ -56,6 +56,20 @@ RCPR_SYM(psock_handle)* RCPR_SYM(psock_handle_create_from_listen_address)(
     const char* listen_address, uint16_t port);
 
 /**
+ * \brief Accept a connection from the given listening \ref psock_handle
+ * instance as a new \ref psock_handle instance.
+ *
+ * \note The returned \ref psock_handle should be checked for errors and NULL.
+ *
+ * \param accept_handle         The \ref psock_handle from which a connection is
+ *                              accepted.
+ *
+ * \returns a \ref psock_handle or NULL.
+ */
+RCPR_SYM(psock_handle)* RCPR_SYM(psock_handle_accept)(
+    RCPR_SYM(psock_handle)* accept_handle);
+
+/**
  * \brief Release a \ref psock_handle resource.
  *
  * \param r         The resource to release.
