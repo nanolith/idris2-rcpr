@@ -41,6 +41,21 @@ struct RCPR_SYM(psock_br_handle)
 };
 
 /**
+ * \brief Create a \ref psock_handle from a listen address and port.
+ *
+ * \note that the returned \ref psock_handle should be checked for errors and
+ * NULL.
+ *
+ * \param listen_address        The listen address from which this handle is
+ *                              created.
+ * \param port                  The port from which this handle is created.
+ *
+ * \returns a \ref psock_handle or NULL.
+ */
+RCPR_SYM(psock_handle)* RCPR_SYM(psock_handle_create_from_listen_address)(
+    const char* listen_address, uint16_t port);
+
+/**
  * \brief Release a \ref psock_handle resource.
  *
  * \param r         The resource to release.
