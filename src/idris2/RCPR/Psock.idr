@@ -6,14 +6,17 @@ import System.FFI
 
 %default total
 
+||| Opaque handle for a Psock instance.
 export
 PsockHandle : Type
 PsockHandle = Struct (rcprSym "psock_handle") [] 
 
+||| Opaque handle for a Buffered Psock Reader instance.
 export
 PsockBufferedReaderHandle : Type
 PsockBufferedReaderHandle = Struct (rcprSym "psock_br_handle") [] 
 
+||| Opaque reference to a C array.
 export
 CArray : Type
 CArray = Struct (rcprSym "psock_c_array") []
@@ -70,6 +73,12 @@ readLine handle =
 %foreign (librcprhelper "psock_br_handle_write_string_line")
 prim__brWriteStringLine : PsockBufferedReaderHandle -> String -> PrimIO Int
 
+||| Write a string as a line to the given Buffered Psock instance.
+|||
+||| Parameters:
+||| - @handle is the Buffered Psock Reader instance to which the string is
+|||   written.
+||| - @str is the string to write.
 export
 brWriteStringLine : HasIO io => PsockBufferedReaderHandle -> String -> io ()
 brWriteStringLine handle str = do
@@ -80,6 +89,15 @@ brWriteStringLine handle str = do
 prim__withPsockHandleFromListenAddress
     : String -> Bits16 -> (Ptr PsockHandle -> PrimIO ()) -> PrimIO Int
 
+||| Create a PsockHandle from the given listen address and port, passing this to
+||| the provided function.
+|||
+||| After the function is called, this socket instance is automatically closed.
+|||
+||| Parameters:
+||| - @addr is the listen address (IP address string).
+||| - @port is the listen port.
+||| - @fn is the function to call with the created handle.
 export
 withPsockHandleFromListenAddress :
     String -> Bits16 -> (PsockHandle -> IO ()) -> CIO ()
@@ -94,6 +112,16 @@ withPsockHandleFromListenAddress addr port fn = do
 prim__withAcceptedPsockHandle
     : PsockHandle -> (Ptr PsockHandle -> PrimIO ()) -> PrimIO Int
 
+||| Accept a socket connection from the given listen socket handle, create a
+||| PsockHandle using this connection, and pass it to the provided function.
+|||
+||| After the function is called, the accepted connection is automatically
+||| closed.
+|||
+||| Parameters:
+||| - @handle is the listening socket handle from which a connection is
+|||   accepted.
+||| - @fn is the function to call with this accepted connection.
 export
 withAcceptedPsockHandle :
     PsockHandle -> (PsockHandle -> IO ()) -> CIO ()
@@ -108,6 +136,16 @@ withAcceptedPsockHandle handle fn = do
 prim__withBufferedReader
     : PsockHandle -> (Ptr PsockBufferedReaderHandle -> PrimIO()) -> PrimIO Int
 
+||| Create a buffered reader from the given PsockHandle instance, and call the
+||| provided function with this handle.
+|||
+||| After the function is called, the buffered reader instance is automatically
+||| torn down.
+|||
+||| Parameters:
+||| - @handle is the PsockHandle instance from which this buffered reader is
+|||   created.
+||| - @fn is the function to call with this buffered reader instance.
 export
 withBufferedReader :
     PsockHandle -> (PsockBufferedReaderHandle -> IO ()) -> CIO ()
@@ -118,6 +156,12 @@ withBufferedReader handle fn = do
         then pure ()
         else throwError stat
 
+||| Read a line from the given PsockBufferedReaderHandle instance, and call the
+||| provided function with this line.
+|||
+||| Parameters:
+||| - @handle is the buffered reader handle from which this line is read.
+||| - @fn is the function to call with this line.
 export
 withReadLine : PsockBufferedReaderHandle -> (String -> IO ()) -> CIO ()
 withReadLine handle fn = do
@@ -128,6 +172,15 @@ withReadLine handle fn = do
 prim__withReadRawBuffer
     : PsockBufferedReaderHandle -> (CArray -> PrimIO ()) -> PrimIO Int
 
+||| Read a raw buffer of the given size from the given buffered reader handle,
+||| and call the provided function with this raw buffer.
+|||
+||| After the function is called, the created CArray instance is automatically
+||| reclaimed by the allocator.
+|||
+||| Parameters:
+||| - @br is the buffered reader handle instance for this operation.
+||| - @fn is the function to call with the raw buffer after it is read.
 export
 withReadRawBuffer : PsockBufferedReaderHandle -> (CArray -> IO ()) -> CIO ()
 withReadRawBuffer br fn = do
