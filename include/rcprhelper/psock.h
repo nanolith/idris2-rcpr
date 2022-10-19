@@ -33,6 +33,18 @@ typedef struct RCPR_SYM(psock_handle) RCPR_SYM(psock_handle);
 typedef struct RCPR_SYM(psock_br_handle) RCPR_SYM(psock_br_handle);
 
 /**
+ * \brief The psock c array opaque type captures a raw C array read from a
+ * buffered reader.
+ */
+typedef struct RCPR_SYM(psock_c_array) RCPR_SYM(psock_c_array);
+
+struct RCPR_SYM(psock_c_array)
+{
+    void* data;
+    size_t size;
+};
+
+/**
  * \brief Return the latest status code from a \ref psock_br_handle operation.
  *
  * \param handle                The \ref psock_br_handle to interrogate.
