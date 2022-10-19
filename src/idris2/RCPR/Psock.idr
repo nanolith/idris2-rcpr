@@ -76,15 +76,6 @@ brWriteStringLine handle str = do
     status <- primIO $ prim__brWriteStringLine handle str
     pure ()
 
-%foreign (librcprhelper "psock_br_handle_release")
-prim__PsockBufferedReaderHandleRelease : PsockBufferedReaderHandle -> PrimIO Int
-
-export
-psockBufferedReaderHandleRelease
-    : HasIO io => PsockBufferedReaderHandle -> io Int
-psockBufferedReaderHandleRelease handle =
-    primIO (prim__PsockBufferedReaderHandleRelease handle)
-
 %foreign (librcprhelper "with_psock_handle_created_from_listen_address")
 prim__withPsockHandleFromListenAddress
     : String -> Bits16 -> (Ptr PsockHandle -> PrimIO ()) -> PrimIO Int
