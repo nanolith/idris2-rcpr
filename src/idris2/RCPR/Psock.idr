@@ -14,15 +14,6 @@ export
 PsockBufferedReaderHandle : Type
 PsockBufferedReaderHandle = Struct (rcprSym "psock_br_handle") [] 
 
-%foreign (librcprhelper "psock_handle_create_from_listen_address")
-prim__mkPsockHandleFromListenAddress :
-    String -> Bits16 -> PrimIO PsockHandle
-
-export
-mkPsockHandleFromListenAddress : HasIO io => String -> Bits16 -> io PsockHandle
-mkPsockHandleFromListenAddress addr port =
-    primIO (prim__mkPsockHandleFromListenAddress addr port)
-
 %foreign (librcprhelper "psock_handle_accept")
 prim__accept : PsockHandle -> PrimIO PsockHandle
 
