@@ -14,6 +14,10 @@ export
 PsockBufferedReaderHandle : Type
 PsockBufferedReaderHandle = Struct (rcprSym "psock_br_handle") [] 
 
+export
+CArray : Type
+CArray = Struct (rcprSym "psock_c_array") []
+
 %foreign (librcprhelper "psock_br_handle_get_status")
 prim__PsockBufferedReaderHandleGetStatus :
     PsockBufferedReaderHandle -> PrimIO Int
@@ -123,3 +127,15 @@ withReadLine : PsockBufferedReaderHandle -> (String -> IO ()) -> CIO ()
 withReadLine handle fn = do
     line <- readLine handle
     lift $ fn line
+
+%foreign (librcprhelper "with_read_raw_buffer")
+prim__withReadRawBuffer
+    : PsockBufferedReaderHandle -> (CArray -> PrimIO ()) -> PrimIO Int
+
+export
+withReadRawBuffer : PsockBufferedReaderHandle -> (CArray -> IO ()) -> CIO ()
+withReadRawBuffer br fn = do
+    stat <- lift $ primIO $ prim__withReadRawBuffer br $ \arr => toPrim $ fn arr
+    if stat == 0
+        then pure ()
+        else throwError stat
