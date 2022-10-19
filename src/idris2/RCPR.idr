@@ -16,6 +16,10 @@ LiftCIO CIO where
   liftCIO = id
 
 export
+runCIOAsEither : CIO a -> IO (Either Int a)
+runCIOAsEither (MkEitherT io) = io
+
+export
 runCIOWith : Lazy (Int -> IO a) -> CIO a -> IO a
 runCIOWith f (MkEitherT io) = io >>= either f pure
 
