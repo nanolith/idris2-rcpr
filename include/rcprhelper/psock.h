@@ -76,15 +76,6 @@ status RCPR_SYM(psock_br_handle_write_string_line)(
     RCPR_SYM(psock_br_handle)* handle, const char* str);
 
 /**
- * \brief Return true if the given handle is not NULL.
- *
- * \param handle                The \ref psock_br_handle to check.
- *
- * \returns true if the handle is not NULL and false otherwise.
- */
-bool RCPR_SYM(psock_br_handle_is_valid)(RCPR_SYM(psock_br_handle)* handle);
-
-/**
  * \brief Return true if the given status is a partial line read status.
  *
  * \param s                     The status to check.
