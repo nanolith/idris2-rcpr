@@ -33,17 +33,6 @@ typedef struct RCPR_SYM(psock_handle) RCPR_SYM(psock_handle);
 typedef struct RCPR_SYM(psock_br_handle) RCPR_SYM(psock_br_handle);
 
 /**
- * \brief Return the latest status code from a \ref psock_handle operation.
- *
- * \param handle                The \ref psock_handle to interrogate.
- *
- * \returns a status code indicating success or failure.
- *      - STATUS_SUCCESS on success.
- *      - a non-zero error code on failure.
- */
-status RCPR_SYM(psock_handle_get_status)(RCPR_SYM(psock_handle)* handle);
-
-/**
  * \brief Return the latest status code from a \ref psock_br_handle operation.
  *
  * \param handle                The \ref psock_br_handle to interrogate.
