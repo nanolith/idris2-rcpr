@@ -14,15 +14,6 @@ export
 PsockBufferedReaderHandle : Type
 PsockBufferedReaderHandle = Struct (rcprSym "psock_br_handle") [] 
 
-%foreign (librcprhelper "psock_handle_is_valid")
-prim__isPsockHandleValid : PsockHandle -> PrimIO Int
-
-export
-isPsockHandleValid : HasIO io => PsockHandle -> io Bool
-isPsockHandleValid handle = do
-    res <- primIO (prim__isPsockHandleValid handle)
-    if res == 0 then pure False else pure True
-
 %foreign (librcprhelper "psock_br_handle_is_valid")
 prim__isPsockBufferedReaderHandleValid
     : PsockBufferedReaderHandle -> PrimIO Int
