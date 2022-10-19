@@ -5,18 +5,15 @@ import RCPR.Psock
 
 %default total
 
-echoLoop : Nat -> PsockBufferedReaderHandle -> IO ()
+echoLoop : Nat -> PsockBufferedReaderHandle -> CIO ()
 echoLoop Z _ = pure ()
 echoLoop (S x) handle = do
     withReadLine handle $ brWriteStringLine handle
-    status <- psockBufferedReaderHandleGetStatus handle
-    if status == 0
-        then echoLoop x handle
-        else pure ()
+    echoLoop x handle
 
 dispatchSocket : PsockHandle -> IO ()
 dispatchSocket handle = do
-    runCIO $ withBufferedReader handle $ echoLoop 1000
+    runCIO $ withBufferedReader handle $ \br => runCIO $ echoLoop 1000 br
 
 acceptAndDispatch : Nat -> PsockHandle -> IO ()
 acceptAndDispatch Z _ = pure ()

@@ -101,24 +101,22 @@ psockBufferedReaderHandleGetStatus handle =
 %foreign (librcprhelper "psock_br_handle_read_line")
 prim__readLine : PsockBufferedReaderHandle -> PrimIO (Ptr String)
 
-readLinePartial : HasIO io => PsockBufferedReaderHandle -> io (Ptr String)
+readLinePartial : PsockBufferedReaderHandle -> IO (Ptr String)
 readLinePartial handle = primIO (prim__readLine handle)
 
-readLineHelper :
-    HasIO io => Nat -> PsockBufferedReaderHandle -> String
-                -> io (Either Int String)
-readLineHelper Z handle line = pure (Left 1)
+readLineHelper : Nat -> PsockBufferedReaderHandle -> String -> CIO String
+readLineHelper Z handle line = throwError 1
 readLineHelper (S x) handle line = do
-    pstring <- readLinePartial handle
+    pstring <- lift $ readLinePartial handle
     status <- psockBufferedReaderHandleGetStatus handle
     if 0 == status
-        then pure (Right (line ++ getString pstring))
+        then pure $ line ++ getString pstring
         else if psockStatusIsPartialRead status
-            then readLineHelper x handle (line ++ getString pstring)
-            else pure (Left status)
+            then readLineHelper x handle $ line ++ getString pstring
+            else throwError status
 
 export
-readLine : HasIO io => PsockBufferedReaderHandle -> io (Either Int String)
+readLine : PsockBufferedReaderHandle -> CIO String
 readLine handle =
     readLineHelper 100 handle ""
 
@@ -190,10 +188,7 @@ withBufferedReader handle fn = do
         else throwError stat
 
 export
-withReadLine :
-    HasIO io => PsockBufferedReaderHandle -> (String -> io ()) -> io ()
+withReadLine : PsockBufferedReaderHandle -> (String -> IO ()) -> CIO ()
 withReadLine handle fn = do
     line <- readLine handle
-    case line of
-        Left _ => pure ()
-        Right str => fn str
+    lift $ fn line
