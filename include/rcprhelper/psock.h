@@ -86,17 +86,6 @@ status RCPR_SYM(psock_br_handle_write_string_line)(
 bool RCPR_SYM(psock_br_status_is_partial_line_read)(status s);
 
 /**
- * \brief Attempt to release a \ref psock_br_handle instance.
- *
- * \param handle                The \ref psock_br_handle instance to release.
- *
- * \returns a status code indicating success or failure.
- *      - STATUS_SUCCESS on success.
- *      - a non-zero error code on failure.
- */
-status RCPR_SYM(psock_br_handle_release)(RCPR_SYM(psock_br_handle)* handle);
-
-/**
  * \brief Unwrap a void string into a real string.
  *
  * This method is used by Idris to handle results that could be NULL.
