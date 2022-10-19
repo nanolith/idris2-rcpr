@@ -1,5 +1,6 @@
 module RCPR.Psock
 
+import RCPR
 import RCPR.Library
 import System.FFI
 
@@ -83,6 +84,15 @@ psockStatusIsPartialRead status =
 getString : Ptr String -> String
 
 export
+%foreign (librcprhelper "psock_handle_get")
+getPsockHandle : Ptr PsockHandle -> PsockHandle
+
+export
+%foreign (librcprhelper "psock_br_handle_get")
+getPsockBuffedReaderHandle
+    : Ptr PsockBufferedReaderHandle -> PsockBufferedReaderHandle
+
+export
 psockBufferedReaderHandleGetStatus
     : HasIO io => PsockBufferedReaderHandle -> io Int
 psockBufferedReaderHandleGetStatus handle =
@@ -137,56 +147,47 @@ psockBufferedReaderHandleRelease
 psockBufferedReaderHandleRelease handle =
     primIO (prim__PsockBufferedReaderHandleRelease handle)
 
+%foreign (librcprhelper "with_psock_handle_created_from_listen_address")
+prim__withPsockHandleFromListenAddress
+    : String -> Bits16 -> (Ptr PsockHandle -> PrimIO ()) -> PrimIO Int
+
 export
 withPsockHandleFromListenAddress :
-    HasIO io => String -> Bits16 -> (PsockHandle -> io ()) -> io ()
+    String -> Bits16 -> (PsockHandle -> IO ()) -> CIO ()
 withPsockHandleFromListenAddress addr port fn = do
-    handle <- mkPsockHandleFromListenAddress addr port
-    valid <- isPsockHandleValid handle
-    if valid
-        then do
-            status <- psockHandleGetStatus handle
-            if status == 0
-                then do
-                    () <- fn handle
-                    stat <- psockHandleRelease handle
-                    pure ()
-                else pure ()
-        else pure ()
+    stat <- lift $ primIO $ prim__withPsockHandleFromListenAddress addr port $
+        \h => toPrim $ fn $ getPsockHandle h
+    if stat == 0
+        then pure ()
+        else throwError stat
+
+%foreign (librcprhelper "with_accepted_psock_handle")
+prim__withAcceptedPsockHandle
+    : PsockHandle -> (Ptr PsockHandle -> PrimIO ()) -> PrimIO Int
 
 export
 withAcceptedPsockHandle :
-    HasIO io => PsockHandle -> (PsockHandle -> io ()) -> io ()
+    PsockHandle -> (PsockHandle -> IO ()) -> CIO ()
 withAcceptedPsockHandle handle fn = do
-    h <- accept handle
-    valid <- isPsockHandleValid h
-    if valid
-        then do
-            status <- psockHandleGetStatus h
-            if status == 0
-                then do
-                    () <- fn h
-                    stat <- psockHandleRelease h
-                    pure ()
-                else pure ()
-        else pure ()
+    stat <- lift $ primIO $ prim__withAcceptedPsockHandle handle $
+        \h => toPrim $ fn $ getPsockHandle h
+    if stat == 0
+        then pure ()
+        else throwError stat
+
+%foreign (librcprhelper "with_buffered_reader")
+prim__withBufferedReader
+    : PsockHandle -> (Ptr PsockBufferedReaderHandle -> PrimIO()) -> PrimIO Int
 
 export
 withBufferedReader :
-    HasIO io => PsockHandle -> (PsockBufferedReaderHandle -> io ()) -> io ()
+    PsockHandle -> (PsockBufferedReaderHandle -> IO ()) -> CIO ()
 withBufferedReader handle fn = do
-    br <- mkPsockBufferedReaderHandle handle
-    valid <- isPsockBufferedReaderHandleValid br
-    if valid
-        then do
-            status <- psockBufferedReaderHandleGetStatus br
-            if status == 0
-                then do
-                    () <- fn br
-                    stat <- psockBufferedReaderHandleRelease br
-                    pure ()
-                else pure ()
-        else pure ()
+    stat <- lift $ primIO $ prim__withBufferedReader handle $
+        \br => toPrim $ fn $ getPsockBuffedReaderHandle br
+    if stat == 0
+        then pure ()
+        else throwError stat
 
 export
 withReadLine :

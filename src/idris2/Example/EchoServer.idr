@@ -1,5 +1,6 @@
 module Example.EchoServer
 
+import RCPR
 import RCPR.Psock
 
 %default total
@@ -13,15 +14,17 @@ echoLoop (S x) handle = do
         then echoLoop x handle
         else pure ()
 
+dispatchSocket : PsockHandle -> IO ()
+dispatchSocket handle = do
+    runCIO $ withBufferedReader handle $ echoLoop 1000
+
 acceptAndDispatch : Nat -> PsockHandle -> IO ()
 acceptAndDispatch Z _ = pure ()
 acceptAndDispatch (S x) handle = do
-    withAcceptedPsockHandle handle $ flip withBufferedReader $ echoLoop 1000
-    status <- psockHandleGetStatus handle
-    if status == 0
-        then acceptAndDispatch x handle
-        else pure ()
+    runCIO $ withAcceptedPsockHandle handle $ dispatchSocket
+    acceptAndDispatch x handle
         
 main : IO ()
 main =
-    withPsockHandleFromListenAddress "0.0.0.0" 9001 $ acceptAndDispatch 1000
+    runCIO $
+        withPsockHandleFromListenAddress "0.0.0.0" 9001 $ acceptAndDispatch 1000
