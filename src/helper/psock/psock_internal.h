@@ -70,6 +70,25 @@ RCPR_SYM(psock_handle)* RCPR_SYM(psock_handle_accept)(
     RCPR_SYM(psock_handle)* accept_handle);
 
 /**
+ * \brief Create a \ref psock_br_handle from a \ref psock_handle.
+ *
+ * \note The returned \ref psock_br_handle should be checked for errors and
+ * NULL. Furthermore, this \ref psock_br_handle is a separate instance from the
+ * \ref psock_handle but is dependent on it. It must be released BEFORE the
+ * underlying \ref psock_handle is released. Reads from this handle are
+ * buffered: reading from the underlying \ref psock_handle instance will be out
+ * of order and will lead to data corruption once this \ref psock_br_handle
+ * instance is read from.
+ *
+ * \param parent_handle         The parent \ref psock_handle from which this
+ *                              instance is created.
+ *
+ * \returns a \ref psock_br_handle or NULL.
+ */
+RCPR_SYM(psock_br_handle)* RCPR_SYM(psock_br_handle_create)(
+    RCPR_SYM(psock_handle)* parent_handle);
+
+/**
  * \brief Release a \ref psock_handle resource.
  *
  * \param r         The resource to release.
