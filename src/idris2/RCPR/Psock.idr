@@ -14,13 +14,6 @@ export
 PsockBufferedReaderHandle : Type
 PsockBufferedReaderHandle = Struct (rcprSym "psock_br_handle") [] 
 
-%foreign (librcprhelper "psock_handle_get_status")
-prim__PsockHandleGetStatus : PsockHandle -> PrimIO Int
-
-export
-psockHandleGetStatus : HasIO io => PsockHandle -> io Int
-psockHandleGetStatus handle = primIO (prim__PsockHandleGetStatus handle)
-
 %foreign (librcprhelper "psock_br_handle_get_status")
 prim__PsockBufferedReaderHandleGetStatus :
     PsockBufferedReaderHandle -> PrimIO Int
