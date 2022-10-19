@@ -183,6 +183,26 @@ status RCPR_SYM(with_buffered_reader)(
     RCPR_SYM(psock_handle)* handle,
     void (*callback_fn)(RCPR_SYM(psock_br_handle)*));
 
+/**
+ * \brief Read a raw block of data of a given size, and call a callback with
+ * this block exposed as a \ref psock_c_array. This callback can call other C
+ * FFI functions with this \ref psock_c_array, and these functions can access
+ * the inner details.
+ *
+ * \param handle                The \ref psock_br_handle to use to perform this
+ *                              read.
+ * \param size                  The number of bytes to read.
+ * \param callback_fn           The callback function to call with the read raw
+ *                              array on success.
+ *
+ * \returns a status code indicating success or failure.
+ *      - STATUS_SUCCESS on success.
+ *      - a non-zero error code on failure.
+ */
+status RCPR_SYM(with_read_raw_buffer)(
+    RCPR_SYM(psock_br_handle)* handle, size_t size,
+    void (*callback_fn)(RCPR_SYM(psock_c_array)*));
+
 /* C++ compatibility. */
 # ifdef   __cplusplus
 }
