@@ -68,9 +68,13 @@ ADD_CUSTOM_TARGET(
     COMMAND $(CMAKE_SOURCE_DIR)/scripts/idris2_docs.sh)
 
 ADD_CUSTOM_TARGET(
-    idris2-install INSTALL
+    idris2-install
     COMMAND $(CMAKE_SOURCE_DIR)/scripts/idris2_install.sh
     DEPENDS idris2-compile idris2-docs)
+STRING(
+    CONCAT INSTALL_IDRIS_CMD
+    "execute_process(COMMAND \"" ${CMAKE_MAKE_PROGRAM} "\" \"idris2-install\")")
+INSTALL(CODE ${INSTALL_IDRIS_CMD})
 
 #Build a pkg-config file
 SET(RCPR_PC "${CMAKE_BINARY_DIR}/rcprhelper.pc")
