@@ -60,15 +60,15 @@ ADD_CUSTOM_TARGET(
     DEPENDS testidris2rcpr)
 
 ADD_CUSTOM_TARGET(
-    idris2-compile
+    idris2-compile ALL
     COMMAND $(CMAKE_SOURCE_DIR)/scripts/idris2_compile.sh)
 
 ADD_CUSTOM_TARGET(
-    idris2-docs
+    idris2-docs ALL
     COMMAND $(CMAKE_SOURCE_DIR)/scripts/idris2_docs.sh)
 
 ADD_CUSTOM_TARGET(
-    idris2-install
+    idris2-install INSTALL
     COMMAND $(CMAKE_SOURCE_DIR)/scripts/idris2_install.sh
     DEPENDS idris2-compile idris2-docs)
 
