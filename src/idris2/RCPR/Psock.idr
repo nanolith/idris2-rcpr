@@ -1,18 +1,18 @@
 module RCPR.Psock
 
-import RCPR
-import RCPR.Library
-import System.FFI
+import public RCPR
+import public RCPR.Library
+import public System.FFI
 
 %default total
 
 ||| Opaque handle for a Psock instance.
-export
+public export
 PsockHandle : Type
 PsockHandle = Struct (rcprSym "psock_handle") [] 
 
 ||| Opaque handle for a Buffered Psock Reader instance.
-export
+public export
 PsockBufferedReaderHandle : Type
 PsockBufferedReaderHandle = Struct (rcprSym "psock_br_handle") [] 
 
